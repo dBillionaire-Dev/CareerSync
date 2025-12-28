@@ -65,6 +65,8 @@ const Index = () => {
     setContactForm({ name: '', email: '', message: '' });
   };
 
+  const currentYear = new Date().getFullYear();
+
   return (
     <div className="min-h-screen bg-background">
       {/* Navbar */}
@@ -74,7 +76,7 @@ const Index = () => {
             <div className="w-9 h-9 rounded-xl gradient-hero flex items-center justify-center shadow-glow">
               <Briefcase size={18} className="text-primary-foreground" />
             </div>
-            <span className="font-bold text-xl tracking-tight">JobTracker</span>
+            <span className="font-bold text-xl tracking-tight">CareerSync</span>
           </Link>
           
           {/* Desktop Navigation */}
@@ -297,7 +299,7 @@ const Index = () => {
               <div className="w-8 h-8 rounded-lg gradient-hero flex items-center justify-center">
                 <Briefcase size={16} className="text-primary-foreground" />
               </div>
-              <span className="font-bold">JobTracker</span>
+              <span className="font-bold">CareerSync</span>
             </div>
             
             <div className="flex items-center gap-6">
@@ -308,7 +310,7 @@ const Index = () => {
             </div>
             
             <p className="text-sm text-muted-foreground">
-              © 2024 JobTracker. Built for ambitious job seekers.
+              &copy; {currentYear} CareerSync. Built for ambitious job seekers.
             </p>
           </div>
         </div>

@@ -80,7 +80,7 @@ export const DashboardSidebar = () => {
                 <div className="w-9 h-9 rounded-xl bg-primary flex items-center justify-center shadow-glow">
                   <Rocket size={20} className="text-sidebar-primary-foreground" />
                 </div>
-                <span className="font-bold text-lg tracking-tight">JobTracker</span>
+                <span className="font-bold text-lg tracking-tight">CareerSync</span>
               </RouterNavLink>
             )}
           </div>

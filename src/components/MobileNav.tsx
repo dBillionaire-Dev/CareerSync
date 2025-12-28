@@ -46,7 +46,7 @@ export function MobileNav({ onLogout }: MobileNavProps) {
               <div className="w-9 h-9 rounded-xl gradient-hero flex items-center justify-center shadow-glow">
                 <Briefcase size={18} className="text-primary-foreground" />
               </div>
-              <span className="font-bold text-xl tracking-tight">JobTracker</span>
+              <span className="font-bold text-xl tracking-tight">CareerSync</span>
             </Link>
           </div>
 

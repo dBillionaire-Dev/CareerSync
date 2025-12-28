@@ -14,6 +14,8 @@ import {
 } from 'lucide-react';
 
 const Developer = () => {
+  const currentYear = new Date().getFullYear();
+
   return (
     <div className="min-h-screen bg-background">
       {/* Navbar */}
@@ -23,7 +25,7 @@ const Developer = () => {
             <div className="w-9 h-9 rounded-xl gradient-hero flex items-center justify-center shadow-glow">
               <Briefcase size={18} className="text-primary-foreground" />
             </div>
-            <span className="font-bold text-xl tracking-tight">JobTracker</span>
+            <span className="font-bold text-xl tracking-tight">CareerSync</span>
           </Link>
           <Link to="/">
             <Button variant="ghost">
@@ -48,27 +50,27 @@ const Developer = () => {
           {/* Social Links */}
           <div className="flex justify-center gap-4 mb-12">
             <Button variant="outline" size="icon" className="rounded-full" asChild>
-              <a href="https://github.com" target="_blank" rel="noopener noreferrer">
+              <a href="https://github.com/dBillionaire-Dev" target="_blank" rel="noopener noreferrer">
                 <Github size={20} />
               </a>
             </Button>
             <Button variant="outline" size="icon" className="rounded-full" asChild>
-              <a href="https://linkedin.com" target="_blank" rel="noopener noreferrer">
+              <a href="https://linkedin.com/in/ebenezer-ekunke" target="_blank" rel="noopener noreferrer">
                 <Linkedin size={20} />
               </a>
             </Button>
             <Button variant="outline" size="icon" className="rounded-full" asChild>
-              <a href="https://twitter.com" target="_blank" rel="noopener noreferrer">
+              <a href="https://x.com/dBillionaireDev" target="_blank" rel="noopener noreferrer">
                 <Twitter size={20} />
               </a>
             </Button>
             <Button variant="outline" size="icon" className="rounded-full" asChild>
-              <a href="mailto:developer@example.com">
+              <a href="mailto:nezerekunke.dev@gmail.com">
                 <Mail size={20} />
               </a>
             </Button>
             <Button variant="outline" size="icon" className="rounded-full" asChild>
-              <a href="https://portfolio.dev" target="_blank" rel="noopener noreferrer">
+              <a href="https://nex.is-a.dev" target="_blank" rel="noopener noreferrer">
                 <Globe size={20} />
               </a>
             </Button>
@@ -84,7 +86,7 @@ const Developer = () => {
             </CardHeader>
             <CardContent className="prose prose-sm dark:prose-invert max-w-none">
               <p className="text-muted-foreground">
-                JobTracker is a modern job application tracking system built with React, 
+                CareerSync is a modern job application tracking system built with React, 
                 TypeScript, and Tailwind CSS. It helps job seekers organize their applications, 
                 track interview stages, and analyze their job search progress.
               </p>
@@ -157,7 +159,7 @@ const Developer = () => {
       <footer className="py-8 border-t border-border">
         <div className="container mx-auto px-6 text-center">
           <p className="text-sm text-muted-foreground">
-            © 2024 JobTracker. Built with ❤️ by the developer.
+           &copy; {currentYear} CareerSync. Built with ❤️ by the developer.
           </p>
         </div>
       </footer>
