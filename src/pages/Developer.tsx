@@ -43,7 +43,7 @@ const Developer = () => {
             <div className="w-32 h-32 rounded-full gradient-hero mx-auto mb-6 flex items-center justify-center shadow-glow">
               <Code2 size={48} className="text-primary-foreground" />
             </div>
-            <h1 className="text-4xl font-bold mb-2">Developer Profile</h1>
+            <h1 className="text-4xl font-bold mb-2">Ebenezer Ekunke (NexDev)</h1>
             <p className="text-xl text-muted-foreground">Full-Stack Developer</p>
           </div>
 
