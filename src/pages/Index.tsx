@@ -82,9 +82,9 @@ const Index = () => {
           
           {/* Desktop Navigation */}
           <div className="hidden md:flex items-center gap-3">
-            <ThemeToggle />
+            <ThemeToggle variant="ghost" />
             <Link to="/login">
-              <Button variant="ghost" className="gradient-hero font-medium">
+              <Button variant="ghost" className="font-medium">
                 Sign In
               </Button>
             </Link>
