@@ -67,7 +67,7 @@ export const DashboardSidebar = () => {
             {collapsed ? (
               <button
                 onClick={() => setCollapsed(false)}
-                className="w-9 h-9 rounded-xl bg-primary flex items-center justify-center shadow-glow hover:scale-105 transition-transform"
+                className="w-9 h-9 rounded-xl gradient-hero flex items-center justify-center shadow-glow hover:scale-105 transition-transform"
               >
                 <Briefcase size={18} className="text-sidebar-primary-foreground" />
               </button>

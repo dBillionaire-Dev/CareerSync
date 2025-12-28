@@ -230,7 +230,6 @@ const Index = () => {
             Join thousands of job seekers who've transformed their application process
           </p>
           <Link to="/register">
-            {/* <Button size="lg" className="bg-primary-foreground text-primary font-semibold hover:bg-primary-foreground/90 px-8 py-6 text-lg"> */}
             <Button size="lg" className="gradient-hero text-primary-foreground font-semibold shadow-glow hover:bg-primary-foreground/90 px-8 py-6 text-lg transition-opacity">
               Get Started for Free
               <ArrowRight size={20} className="ml-2" />
