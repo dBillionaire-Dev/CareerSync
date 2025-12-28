@@ -14,7 +14,7 @@ export function ThemeToggle() {
       variant="ghost"
       size="icon"
       onClick={toggleTheme}
-      className="text-sidebar-foreground/60 hover:text-sidebar-foreground hover:bg-sidebar-accent"
+      className="text-sidebar-foreground/60 bg-sidebar-accent hover:text-sidebar-foreground hover:bg-sidebar-accent"
     >
       {resolvedTheme === 'dark' ? <Sun size={18} /> : <Moon size={18} />}
       <span className="sr-only">Toggle theme</span>
