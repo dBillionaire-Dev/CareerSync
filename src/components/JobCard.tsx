@@ -58,7 +58,7 @@ export const JobCard = ({ job, onClick, onEdit, onView, onDelete, onFollowUp, cl
           </div>
         </div>
         
-        <div className="flex flex-col items-end gap-2">
+        <div className="flex flex-col-reverse items-end gap-2">
           {/* Quick action buttons */}
           <div className="flex items-center gap-1 opacity-0 group-hover:opacity-100 transition-opacity">
             <Button
