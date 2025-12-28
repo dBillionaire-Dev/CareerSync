@@ -36,10 +36,10 @@ export const JobCard = ({ job, onClick, onEdit, onView, onDelete, onFollowUp, cl
               {job.company.charAt(0)}
             </div>
             <div className="min-w-0">
-              <h3 className="font-semibold text-foreground group-hover:text-primary transition-colors">
+              <h3 className="font-semibold text-foreground truncate group-hover:text-primary transition-colors">
                 {job.role}
               </h3>
-              <p className="text-sm text-muted-foreground">{job.company}</p>
+              <p className="text-sm text-muted-foreground truncate">{job.company}</p>
             </div>
           </div>
           
@@ -58,7 +58,7 @@ export const JobCard = ({ job, onClick, onEdit, onView, onDelete, onFollowUp, cl
           </div>
         </div>
         
-        <div className="flex flex-col-reverse items-end gap-2">
+        <div className="flex flex-col items-end gap-2">
           {/* Quick action buttons */}
           <div className="flex items-center gap-1 opacity-0 group-hover:opacity-100 transition-opacity">
             <Button
