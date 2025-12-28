@@ -69,7 +69,7 @@ export const DashboardSidebar = () => {
                 onClick={() => setCollapsed(false)}
                 className="w-9 h-9 rounded-xl gradient-hero flex items-center justify-center shadow-glow hover:scale-105 transition-transform"
               >
-                <Briefcase size={18} className="text-sidebar-primary-foreground" />
+                <Briefcase size={18} className="text-primary-foreground" />
               </button>
             ) : (
               <RouterNavLink
@@ -77,7 +77,7 @@ export const DashboardSidebar = () => {
                 className="flex items-center gap-3 hover:opacity-80 transition-opacity"
               >
                 <div className="w-9 h-9 rounded-xl gradient-hero flex items-center justify-center shadow-glow">
-                  <Briefcase size={18} className="text-sidebar-primary-foreground" />
+                  <Briefcase size={18} className="text-primary-foreground" />
                 </div>
                 <span className="font-bold text-lg tracking-tight">CareerSync</span>
               </RouterNavLink>
