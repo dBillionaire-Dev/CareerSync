@@ -8,7 +8,6 @@ import {
   LogOut,
   ChevronLeft,
   Menu,
-  Rocket,
 } from 'lucide-react';
 import { cn } from '@/lib/utils';
 import { Button } from '@/components/ui/button';
@@ -45,7 +44,7 @@ export const DashboardSidebar = () => {
       <Button
         variant="ghost"
         size="icon"
-        className="fixed top-4 left-4 z-50 md:hidden"
+        className="fixed top-4 right-4 z-50 md:hidden"
         onClick={() => setCollapsed(!collapsed)}
       >
         <Menu size={20} />
@@ -70,7 +69,7 @@ export const DashboardSidebar = () => {
                 onClick={() => setCollapsed(false)}
                 className="w-9 h-9 rounded-xl bg-primary flex items-center justify-center shadow-glow hover:scale-105 transition-transform"
               >
-                <Rocket size={20} className="text-sidebar-primary-foreground" />
+                <Briefcase size={18} className="text-sidebar-primary-foreground" />
               </button>
             ) : (
               <RouterNavLink
@@ -78,7 +77,7 @@ export const DashboardSidebar = () => {
                 className="flex items-center gap-3 hover:opacity-80 transition-opacity"
               >
                 <div className="w-9 h-9 rounded-xl bg-primary flex items-center justify-center shadow-glow">
-                  <Rocket size={20} className="text-sidebar-primary-foreground" />
+                  <Briefcase size={18} className="text-sidebar-primary-foreground" />
                 </div>
                 <span className="font-bold text-lg tracking-tight">CareerSync</span>
               </RouterNavLink>

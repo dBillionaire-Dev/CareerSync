@@ -223,14 +223,15 @@ const Index = () => {
         </div>
 
         <div className="container mx-auto px-6 text-center">
-          <h2 className="text-3xl md:text-5xl font-bold text-primary-foreground mb-6">
+          <h2 className="text-3xl md:text-5xl font-bold mb-6">
             Ready to Organize Your Job Search?
           </h2>
-          <p className="text-lg text-primary-foreground/70 max-w-2xl mx-auto mb-10">
+          <p className="text-lg max-w-2xl mx-auto mb-10">
             Join thousands of job seekers who've transformed their application process
           </p>
           <Link to="/register">
-            <Button size="lg" className="bg-primary-foreground text-primary font-semibold hover:bg-primary-foreground/90 px-8 py-6 text-lg">
+            {/* <Button size="lg" className="bg-primary-foreground text-primary font-semibold hover:bg-primary-foreground/90 px-8 py-6 text-lg"> */}
+            <Button className="gradient-hero text-primary-foreground font-medium shadow-glow hover:opacity-90 transition-opacity"></Button>
               Get Started for Free
               <ArrowRight size={20} className="ml-2" />
             </Button>
