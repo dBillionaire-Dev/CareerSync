@@ -36,10 +36,10 @@ export const JobCard = ({ job, onClick, onEdit, onView, onDelete, onFollowUp, cl
               {job.company.charAt(0)}
             </div>
             <div className="min-w-0">
-              <h3 className="font-semibold text-foreground truncate group-hover:text-primary transition-colors">
+              <h3 className="font-semibold text-foreground group-hover:text-primary transition-colors">
                 {job.role}
               </h3>
-              <p className="text-sm text-muted-foreground truncate">{job.company}</p>
+              <p className="text-sm text-muted-foreground">{job.company}</p>
             </div>
           </div>
           
