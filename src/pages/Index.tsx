@@ -84,7 +84,7 @@ const Index = () => {
           <div className="hidden md:flex items-center gap-3">
             <ThemeToggle />
             <Link to="/login">
-              <Button variant="ghost" className="font-medium">
+              <Button variant="ghost" className="gradient-hero font-medium">
                 Sign In
               </Button>
             </Link>
