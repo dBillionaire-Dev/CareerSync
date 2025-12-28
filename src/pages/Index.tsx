@@ -18,6 +18,7 @@ import { MobileNav } from '@/components/MobileNav';
 import { useNavigate } from 'react-router-dom';
 import { useState } from 'react';
 import { useToast } from '@/hooks/use-toast';
+import { ThemeToggle } from '@/components/ThemeToggle';
 
 const features = [
   {
@@ -81,6 +82,7 @@ const Index = () => {
           
           {/* Desktop Navigation */}
           <div className="hidden md:flex items-center gap-3">
+            <ThemeToggle />
             <Link to="/login">
               <Button variant="ghost" className="font-medium">
                 Sign In
