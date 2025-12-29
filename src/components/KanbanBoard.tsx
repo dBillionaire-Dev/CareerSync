@@ -24,7 +24,7 @@ interface KanbanBoardProps {
   onDelete: (job: Job) => void;
 }
 
-const kanbanStages: JobStage[] = ['applying', 'interviewing', 'offer', 'rejected'];
+const kanbanStages: JobStage[] = ['tagged', 'applying', 'interviewing', 'offer', 'accepted', 'withdrawn', 'rejected', 'ghosting'];
 
 export const KanbanBoard = ({ jobs, onJobUpdate, onEdit, onView, onDelete }: KanbanBoardProps) => {
   const { toast } = useToast();

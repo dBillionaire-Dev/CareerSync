@@ -35,11 +35,11 @@ const Register = () => {
 
     toast({
       title: 'Account created!',
-      description: 'Welcome to JobTracker. Let\'s start organizing your job search.',
+      description: 'Welcome to CareerSync. Let\'s start organizing your job search.',
     });
 
     setIsLoading(false);
-    navigate('/dashboard');
+    navigate('/login');
   };
 
   return (
