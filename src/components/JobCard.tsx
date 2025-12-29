@@ -154,12 +154,79 @@ export const JobCard = ({ job, onClick, onEdit, onView, onDelete, onFollowUp, cl
       <div className="flex items-center gap-2 flex-wrap mt-auto">
         <StageBadge stage={job.stage} />
         <InterestStars score={job.interestScore} />
+
+        {job.salary && (
+              <span className="flex items-center gap-1 text-xs text-muted-foreground">
+                <DollarSign size={12} />
+                {job.salary}
+              </span>
+            )}
+
       </div>
     </div>
 
     {/* RIGHT */}
     <div className="flex flex-col items-end gap-2 shrink-0 self-start">
       
+      {/* Quick action buttons */}
+  <div className="flex items-center gap-1 opacity-0 group-hover:opacity-100 transition-opacity">
+        <Button
+              variant="ghost"
+              size="icon"
+              className="h-7 w-7 text-muted-foreground hover:text-primary"
+              onClick={(e) => { e.stopPropagation(); onEdit?.(); }}
+              title="Edit"
+            >
+              <Pencil size={14} />
+            </Button>
+            <Button
+              variant="ghost"
+              size="icon"
+              className="h-7 w-7 text-muted-foreground hover:text-primary"
+              onClick={(e) => { e.stopPropagation(); onView?.(); }}
+              title="View"
+            >
+              <Eye size={14} />
+            </Button>
+            <Button
+              variant="ghost"
+              size="icon"
+              className="h-7 w-7 text-muted-foreground hover:text-stage-interviewing"
+              onClick={(e) => { e.stopPropagation(); onFollowUp?.(); }}
+              title="Schedule Follow-up"
+            >
+              <Mail size={14} />
+            </Button>
+            <Button
+              variant="ghost"
+              size="icon"
+              className="h-7 w-7 text-muted-foreground hover:text-destructive"
+              onClick={(e) => { e.stopPropagation(); onDelete?.(); }}
+              title="Delete"
+            >
+              <Trash2 size={14} />
+            </Button>
+          </div>
+
+          {job.url && (
+            <a
+              href={job.url}
+              target="_blank"
+              rel="noopener noreferrer"
+              onClick={(e) => e.stopPropagation()}
+              className="p-2 rounded-lg hover:bg-muted transition-colors text-muted-foreground hover:text-primary"
+            >
+              <ExternalLink size={16} />
+            </a>
+          )}
+          
+          {job.appliedAt && (
+            <span className="flex items-center gap-1 text-xs text-muted-foreground">
+              <Calendar size={12} />
+              {format(new Date(job.appliedAt), 'MMM d')}
+            </span>
+          )}
+
       {/* Action icons */}
       <div className="absolute top-3 right-3 flex items-center gap-1 opacity-0 group-hover:opacity-100 transition-opacity">
         {/* buttons */}
