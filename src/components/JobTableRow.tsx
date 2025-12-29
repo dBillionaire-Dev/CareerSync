@@ -14,6 +14,7 @@ interface JobTableRowProps {
   onView?: (job: Job) => void;
   onDelete?: (job: Job) => void;
   onFollowUp?: (job: Job) => void;
+  compact?: boolean;
 }
 
 const followUpStatus = (job: Job): 'Sent' | 'Pending' | 'None' => {

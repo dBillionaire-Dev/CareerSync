@@ -3,10 +3,12 @@ import { Link } from 'react-router-dom';
 import { Card, CardContent, CardHeader, CardTitle, CardDescription } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
+import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
 import { StageBadge } from '@/components/StageBadge';
+import { FollowUpCalendar } from '@/components/FollowUpCalendar';
 import { mockJobs } from '@/data/mockJobs';
 import { TimelineEntry, Job } from '@/types/job';
-import { Clock, FileText, MessageSquare, Gift, Calendar, User, Users, ExternalLink, ArrowRight, Search } from 'lucide-react';
+import { Clock, FileText, MessageSquare, Gift, Calendar, Users, ArrowRight, Search, CalendarDays, List } from 'lucide-react';
 import { format } from 'date-fns';
 import { cn } from '@/lib/utils';
 
@@ -35,6 +37,7 @@ const TimelineItem = ({ entry, job, isLast }: { entry: TimelineEntry; job: Job; 
 
 const Timeline = () => {
   const [searchQuery, setSearchQuery] = useState('');
+  const [viewMode, setViewMode] = useState<'list' | 'calendar'>('list');
 
   const timelineItems = useMemo(() => {
     const items: { entry: TimelineEntry; job: Job }[] = [];
@@ -50,7 +53,22 @@ const Timeline = () => {
 
   return (
     <div className="p-6 lg:p-8 space-y-8">
-      <div><h1 className="text-3xl font-bold tracking-tight">Timeline</h1><p className="text-muted-foreground mt-1">Track all your job search activities</p></div>
+      <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4">
+        <div>
+          <h1 className="text-3xl font-bold tracking-tight">Timeline</h1>
+          <p className="text-muted-foreground mt-1">Track all your job search activities</p>
+        </div>
+        <Tabs value={viewMode} onValueChange={(v) => setViewMode(v as 'list' | 'calendar')}>
+          <TabsList>
+            <TabsTrigger value="list" className="gap-2">
+              <List size={16} /> List
+            </TabsTrigger>
+            <TabsTrigger value="calendar" className="gap-2">
+              <CalendarDays size={16} /> Calendar
+            </TabsTrigger>
+          </TabsList>
+        </Tabs>
+      </div>
 
       {/* Search */}
       <div className="relative max-w-md">
@@ -58,35 +76,39 @@ const Timeline = () => {
         <Input placeholder="Filter by company or role..." value={searchQuery} onChange={(e) => setSearchQuery(e.target.value)} className="pl-10" />
       </div>
 
-      <div className="grid gap-6 lg:grid-cols-3">
-        {/* Timeline List */}
-        <div className="lg:col-span-2 space-y-6">
-          {filteredItems.length > 0 ? filteredItems.map((item, index) => <TimelineItem key={`${item.job.id}-${item.entry.id}`} entry={item.entry} job={item.job} isLast={index === filteredItems.length - 1} />) : (
-            <Card className="p-12 text-center border-border/50"><div className="w-16 h-16 rounded-full bg-muted mx-auto mb-4 flex items-center justify-center"><Clock size={24} className="text-muted-foreground" /></div><h3 className="font-semibold text-lg mb-2">No timeline entries</h3><p className="text-muted-foreground">{searchQuery ? 'Try a different search' : 'Add entries to your job applications'}</p></Card>
-          )}
-        </div>
+      {viewMode === 'list' ? (
+        <div className="grid gap-6 lg:grid-cols-3">
+          {/* Timeline List */}
+          <div className="lg:col-span-2 space-y-6">
+            {filteredItems.length > 0 ? filteredItems.map((item, index) => <TimelineItem key={`${item.job.id}-${item.entry.id}`} entry={item.entry} job={item.job} isLast={index === filteredItems.length - 1} />) : (
+              <Card className="p-12 text-center border-border/50"><div className="w-16 h-16 rounded-full bg-muted mx-auto mb-4 flex items-center justify-center"><Clock size={24} className="text-muted-foreground" /></div><h3 className="font-semibold text-lg mb-2">No timeline entries</h3><p className="text-muted-foreground">{searchQuery ? 'Try a different search' : 'Add entries to your job applications'}</p></Card>
+            )}
+          </div>
 
-        {/* Sidebar */}
-        <div className="space-y-6">
-          <Card className="border-border/50">
-            <CardHeader><CardTitle>Timeline tips</CardTitle><CardDescription>Suggested entry types</CardDescription></CardHeader>
-            <CardContent className="space-y-3">
-              <div className="flex items-start gap-2"><span className="w-2 h-2 rounded-full bg-stage-interviewing mt-2" /><span className="text-sm"><strong>Interview</strong> — date, panel names, focus areas</span></div>
-              <div className="flex items-start gap-2"><span className="w-2 h-2 rounded-full bg-stage-applying mt-2" /><span className="text-sm"><strong>Recruiter</strong> — email, phone, LinkedIn</span></div>
-              <div className="flex items-start gap-2"><span className="w-2 h-2 rounded-full bg-stage-offer mt-2" /><span className="text-sm"><strong>Resume/Cover letter</strong> — attach links</span></div>
-              <div className="flex items-start gap-2"><span className="w-2 h-2 rounded-full bg-muted-foreground mt-2" /><span className="text-sm"><strong>Notes</strong> — negotiation prep and follow-up reminders</span></div>
-            </CardContent>
-          </Card>
+          {/* Sidebar */}
+          <div className="space-y-6">
+            <Card className="border-border/50">
+              <CardHeader><CardTitle>Timeline tips</CardTitle><CardDescription>Suggested entry types</CardDescription></CardHeader>
+              <CardContent className="space-y-3">
+                <div className="flex items-start gap-2"><span className="w-2 h-2 rounded-full bg-stage-interviewing mt-2" /><span className="text-sm"><strong>Interview</strong> — date, panel names, focus areas</span></div>
+                <div className="flex items-start gap-2"><span className="w-2 h-2 rounded-full bg-stage-applying mt-2" /><span className="text-sm"><strong>Recruiter</strong> — email, phone, LinkedIn</span></div>
+                <div className="flex items-start gap-2"><span className="w-2 h-2 rounded-full bg-stage-offer mt-2" /><span className="text-sm"><strong>Resume/Cover letter</strong> — attach links</span></div>
+                <div className="flex items-start gap-2"><span className="w-2 h-2 rounded-full bg-muted-foreground mt-2" /><span className="text-sm"><strong>Notes</strong> — negotiation prep and follow-up reminders</span></div>
+              </CardContent>
+            </Card>
 
-          <Card className="border-border/50">
-            <CardHeader><CardTitle>Quick action</CardTitle><CardDescription>Add an entry to a job</CardDescription></CardHeader>
-            <CardContent>
-              <p className="text-sm text-muted-foreground mb-4">Open a job and click <strong>Add entry</strong>.</p>
-              <Link to="/dashboard/jobs"><Button variant="outline" className="w-full">Open jobs <ArrowRight size={16} className="ml-2" /></Button></Link>
-            </CardContent>
-          </Card>
+            <Card className="border-border/50">
+              <CardHeader><CardTitle>Quick action</CardTitle><CardDescription>Add an entry to a job</CardDescription></CardHeader>
+              <CardContent>
+                <p className="text-sm text-muted-foreground mb-4">Open a job and click <strong>Add entry</strong>.</p>
+                <Link to="/dashboard/jobs"><Button variant="outline" className="w-full">Open jobs <ArrowRight size={16} className="ml-2" /></Button></Link>
+              </CardContent>
+            </Card>
+          </div>
         </div>
-      </div>
+      ) : (
+        <FollowUpCalendar jobs={mockJobs} />
+      )}
     </div>
   );
 };

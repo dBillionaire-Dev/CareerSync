@@ -12,8 +12,8 @@ import {
   SelectTrigger,
   SelectValue,
 } from '@/components/ui/select';
-import { ArrowLeft, Save, Loader2, Plus, X } from 'lucide-react';
-import { JobStage, LocationType, stageLabels, TimelineEntry, Currency, currencyLabels } from '@/types/job';
+import { ArrowLeft, Save, Loader2, Plus, X, Building2, Target, Users, Link2 } from 'lucide-react';
+import { JobStage, LocationType, stageLabels, TimelineEntry, Currency, currencyLabels, StarStory, Contact } from '@/types/job';
 import { useToast } from '@/hooks/use-toast';
 import { TimelineEntryModal } from '@/components/TimelineEntryModal';
 import { format } from 'date-fns';
@@ -32,6 +32,13 @@ const NewJob = () => {
   const [isLoading, setIsLoading] = useState(false);
   const [timelineModalOpen, setTimelineModalOpen] = useState(false);
   const [timelineEntries, setTimelineEntries] = useState<Omit<TimelineEntry, 'id'>[]>([]);
+
+  // Interview Intelligence
+  const [companyResearch, setCompanyResearch] = useState('');
+  const [starStories, setStarStories] = useState<Omit<StarStory, 'id'>[]>([]);
+  const [contacts, setContacts] = useState<Omit<Contact, 'id'>[]>([]);
+  const [newStory, setNewStory] = useState({ situation: '', task: '', action: '', result: '', linkedRequirement: '' });
+  const [newContact, setNewContact] = useState({ name: '', linkedinUrl: '', email: '', notes: '' });
 
   const [formData, setFormData] = useState({
     company: '', role: '', location: '', locationType: 'remote' as LocationType,
@@ -60,8 +67,31 @@ const NewJob = () => {
     setTimelineEntries((prev) => prev.filter((_, i) => i !== index));
   };
 
+  const addStarStory = () => {
+    if (newStory.situation && newStory.result) {
+      setStarStories((prev) => [...prev, newStory]);
+      setNewStory({ situation: '', task: '', action: '', result: '', linkedRequirement: '' });
+    }
+  };
+
+  const removeStarStory = (index: number) => {
+    setStarStories((prev) => prev.filter((_, i) => i !== index));
+  };
+
+  const addContact = () => {
+    if (newContact.name) {
+      const contactToAdd: Omit<Contact, 'id'> = { ...newContact, lastContactedAt: new Date().toISOString() };
+      setContacts((prev) => [...prev, contactToAdd]);
+      setNewContact({ name: '', linkedinUrl: '', email: '', notes: '' });
+    }
+  };
+
+  const removeContact = (index: number) => {
+    setContacts((prev) => prev.filter((_, i) => i !== index));
+  };
+
   return (
-    <div className="p-6 lg:p-8 max-w-3xl mx-auto">
+    <div className="p-6 lg:p-8 max-w-4xl mx-auto">
       <div className="mb-8">
         <Button variant="ghost" onClick={() => navigate(-1)} className="mb-4 -ml-2 text-muted-foreground">
           <ArrowLeft size={18} className="mr-2" /> Back
@@ -138,6 +168,111 @@ const NewJob = () => {
               <Label htmlFor="description">Job Description</Label>
               <Textarea id="description" placeholder="Paste the full job description here..." value={formData.description} onChange={(e) => handleChange('description', e.target.value)} rows={6} />
             </div>
+
+            {/* Interview Intelligence Section */}
+            <Card className="border-border/50 border-primary/20">
+              <CardHeader className="pb-3">
+                <div className="flex items-center gap-2">
+                  <Building2 size={20} className="text-primary" />
+                  <CardTitle className="text-base">Interview Intelligence</CardTitle>
+                </div>
+                <CardDescription>Prepare thoroughly for your interviews</CardDescription>
+              </CardHeader>
+              <CardContent className="space-y-6">
+                {/* Company Research */}
+                <div className="space-y-2">
+                  <Label className="flex items-center gap-2">
+                    <Building2 size={14} />
+                    Company Research
+                  </Label>
+                  <Textarea
+                    placeholder="Mission statement, values, recent news, key products, culture notes..."
+                    value={companyResearch}
+                    onChange={(e) => setCompanyResearch(e.target.value)}
+                    rows={4}
+                  />
+                </div>
+
+                {/* STAR Method Bank */}
+                <div className="space-y-3">
+                  <Label className="flex items-center gap-2">
+                    <Target size={14} />
+                    STAR Method Bank
+                  </Label>
+                  <p className="text-xs text-muted-foreground">Link your experiences to job requirements</p>
+                  
+                  {starStories.length > 0 && (
+                    <div className="space-y-2">
+                      {starStories.map((story, i) => (
+                        <div key={i} className="p-3 bg-muted/50 rounded-lg">
+                          <div className="flex items-start justify-between">
+                            <div className="flex-1">
+                              <p className="text-sm font-medium">{story.situation.slice(0, 60)}...</p>
+                              {story.linkedRequirement && (
+                                <p className="text-xs text-primary mt-1">→ {story.linkedRequirement}</p>
+                              )}
+                            </div>
+                            <Button variant="ghost" size="icon" className="h-6 w-6" onClick={() => removeStarStory(i)}><X size={12} /></Button>
+                          </div>
+                        </div>
+                      ))}
+                    </div>
+                  )}
+
+                  <div className="space-y-2 p-3 border border-dashed border-border rounded-lg">
+                    <Input placeholder="Situation: Describe the context..." value={newStory.situation} onChange={(e) => setNewStory(s => ({ ...s, situation: e.target.value }))} />
+                    <Input placeholder="Task: What was your responsibility?" value={newStory.task} onChange={(e) => setNewStory(s => ({ ...s, task: e.target.value }))} />
+                    <Input placeholder="Action: What did you do?" value={newStory.action} onChange={(e) => setNewStory(s => ({ ...s, action: e.target.value }))} />
+                    <Input placeholder="Result: What was the outcome?" value={newStory.result} onChange={(e) => setNewStory(s => ({ ...s, result: e.target.value }))} />
+                    <Input placeholder="Linked to requirement (optional): e.g., 'Leadership experience'" value={newStory.linkedRequirement} onChange={(e) => setNewStory(s => ({ ...s, linkedRequirement: e.target.value }))} />
+                    <Button type="button" variant="outline" size="sm" onClick={addStarStory} disabled={!newStory.situation || !newStory.result}>
+                      <Plus size={14} className="mr-1" /> Add Story
+                    </Button>
+                  </div>
+                </div>
+
+                {/* Networking Contacts */}
+                <div className="space-y-3">
+                  <Label className="flex items-center gap-2">
+                    <Users size={14} />
+                    Networking / Referral Contacts
+                  </Label>
+                  
+                  {contacts.length > 0 && (
+                    <div className="space-y-2">
+                      {contacts.map((contact, i) => (
+                        <div key={i} className="flex items-center justify-between p-3 bg-muted/50 rounded-lg">
+                          <div className="flex items-center gap-3">
+                            <div className="w-8 h-8 rounded-full bg-primary/10 flex items-center justify-center text-primary font-medium text-sm">
+                              {contact.name.charAt(0)}
+                            </div>
+                            <div>
+                              <p className="text-sm font-medium">{contact.name}</p>
+                              {contact.linkedinUrl && (
+                                <a href={contact.linkedinUrl} target="_blank" rel="noopener noreferrer" className="text-xs text-primary hover:underline flex items-center gap-1">
+                                  <Link2 size={10} /> LinkedIn
+                                </a>
+                              )}
+                            </div>
+                          </div>
+                          <Button variant="ghost" size="icon" className="h-6 w-6" onClick={() => removeContact(i)}><X size={12} /></Button>
+                        </div>
+                      ))}
+                    </div>
+                  )}
+
+                  <div className="grid gap-2 sm:grid-cols-2 p-3 border border-dashed border-border rounded-lg">
+                    <Input placeholder="Contact name" value={newContact.name} onChange={(e) => setNewContact(c => ({ ...c, name: e.target.value }))} />
+                    <Input placeholder="LinkedIn URL" value={newContact.linkedinUrl} onChange={(e) => setNewContact(c => ({ ...c, linkedinUrl: e.target.value }))} />
+                    <Input placeholder="Email (optional)" value={newContact.email} onChange={(e) => setNewContact(c => ({ ...c, email: e.target.value }))} />
+                    <Input placeholder="Notes (optional)" value={newContact.notes} onChange={(e) => setNewContact(c => ({ ...c, notes: e.target.value }))} />
+                    <Button type="button" variant="outline" size="sm" onClick={addContact} disabled={!newContact.name} className="sm:col-span-2">
+                      <Plus size={14} className="mr-1" /> Add Contact
+                    </Button>
+                  </div>
+                </div>
+              </CardContent>
+            </Card>
 
             <div className="space-y-2">
               <Label htmlFor="notes">Notes</Label>

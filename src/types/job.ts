@@ -22,6 +22,23 @@ export interface TimelineEntry {
   coverLetterLink?: string;
 }
 
+export interface StarStory {
+  situation: string;
+  task: string;
+  action: string;
+  result: string;
+  linkedRequirement?: string;
+}
+
+export interface Contact {
+  name: string;
+  role?: string;
+  linkedinUrl?: string;
+  email?: string;
+  notes?: string;
+  lastContactedAt?: string;
+}
+
 export type Currency = 'USD' | 'EUR' | 'GBP' | 'NGN' | 'CAD' | 'AUD' | 'INR' | 'JPY';
 
 export const currencyLabels: Record<Currency, string> = {
@@ -62,6 +79,10 @@ export interface Job {
   timeline: TimelineEntry[];
   isArchived: boolean;
   followUpDate?: string;
+  // Interview Intelligence
+  companyResearch?: string;
+  starStories?: StarStory[];
+  contacts?: Contact[];
 }
 
 export interface JobFilters {

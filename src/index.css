@@ -217,3 +217,65 @@
   background-size: 200% 100%;
   animation: shimmer 2s infinite;
 }
+
+/* FullCalendar Custom Styling */
+.fc {
+  --fc-border-color: hsl(var(--border));
+  --fc-button-bg-color: hsl(var(--primary));
+  --fc-button-border-color: hsl(var(--primary));
+  --fc-button-hover-bg-color: hsl(var(--primary) / 0.9);
+  --fc-button-hover-border-color: hsl(var(--primary) / 0.9);
+  --fc-button-active-bg-color: hsl(var(--primary) / 0.8);
+  --fc-button-active-border-color: hsl(var(--primary) / 0.8);
+  --fc-today-bg-color: hsl(var(--primary) / 0.1);
+  --fc-event-bg-color: hsl(var(--primary));
+  --fc-event-border-color: hsl(var(--primary));
+  --fc-page-bg-color: hsl(var(--background));
+  --fc-neutral-bg-color: hsl(var(--muted));
+  --fc-neutral-text-color: hsl(var(--muted-foreground));
+}
+
+.fc .fc-toolbar-title {
+  @apply text-lg font-semibold text-foreground;
+}
+
+.fc .fc-button {
+  @apply rounded-md text-sm font-medium;
+}
+
+.fc .fc-daygrid-day-number {
+  @apply text-foreground p-2;
+}
+
+.fc .fc-col-header-cell-cushion {
+  @apply text-muted-foreground font-medium py-2;
+}
+
+.fc .fc-daygrid-day.fc-day-today {
+  @apply bg-primary/10;
+}
+
+.fc .fc-event {
+  @apply rounded px-1.5 py-0.5 text-xs border-0 cursor-pointer;
+}
+
+.fc .fc-event-title {
+  @apply font-medium;
+}
+
+.fc .fc-daygrid-event-dot {
+  @apply hidden;
+}
+
+.fc-theme-standard td,
+.fc-theme-standard th {
+  border-color: hsl(var(--border));
+}
+
+.fc-theme-standard .fc-scrollgrid {
+  border-color: hsl(var(--border));
+}
+
+.dark .fc {
+  --fc-page-bg-color: hsl(var(--card));
+}

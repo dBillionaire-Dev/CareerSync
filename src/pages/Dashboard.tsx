@@ -1,10 +1,11 @@
-import { useMemo } from 'react';
+import { useMemo, useState, useEffect } from 'react';
 import { Link } from 'react-router-dom';
 import { Card, CardContent, CardHeader, CardTitle, CardDescription } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
-import { Briefcase, Clock, CheckCircle2, Ghost, Plus, ArrowRight } from 'lucide-react';
+import { Plus, ArrowRight } from 'lucide-react';
 import { mockJobs } from '@/data/mockJobs';
 import { StageBadge } from '@/components/StageBadge';
+import { ApiHealthCheck } from '@/components/ApiHealthCheck';
 import { JobStage, stageLabels } from '@/types/job';
 import { format } from 'date-fns';
 
@@ -14,6 +15,15 @@ const stageChartColors: Record<JobStage, string> = {
 };
 
 const Dashboard = () => {
+  const [username, setUsername] = useState('');
+
+  useEffect(() => {
+    const storedUsername = localStorage.getItem('username');
+    if (storedUsername) {
+      setUsername(storedUsername);
+    }
+  }, []);
+
   const stats = useMemo(() => {
     const activeJobs = mockJobs.filter((j) => !j.isArchived);
     const stages = activeJobs.reduce((acc, job) => { acc[job.stage] = (acc[job.stage] || 0) + 1; return acc; }, {} as Record<JobStage, number>);
@@ -27,14 +37,19 @@ const Dashboard = () => {
     <div className="p-6 lg:p-8 space-y-8">
       <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4">
         <div>
-          <h1 className="text-3xl font-bold tracking-tight">Dashboard</h1>
+          <h1 className="text-3xl font-bold tracking-tight">
+            {username ? `Hi, ${username}!` : 'Dashboard'}
+          </h1>
           <p className="text-muted-foreground mt-1">A quick glance at your current workload</p>
         </div>
-        <Link to="/dashboard/jobs/new">
-          <Button className="gradient-hero text-primary-foreground font-semibold shadow-glow hover:opacity-90">
-            <Plus size={18} className="mr-2" /> New job
-          </Button>
-        </Link>
+        <div className="flex items-center gap-3">
+          <ApiHealthCheck />
+          <Link to="/dashboard/jobs/new">
+            <Button className="gradient-hero text-primary-foreground font-semibold shadow-glow hover:opacity-90">
+              <Plus size={18} className="mr-2" /> New job
+            </Button>
+          </Link>
+        </div>
       </div>
 
       {/* Pipeline Snapshot */}

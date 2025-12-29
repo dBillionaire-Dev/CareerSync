@@ -4,7 +4,7 @@ import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
-import { Briefcase, Mail, Lock, User, ArrowRight, Loader2, CheckCircle2 } from 'lucide-react';
+import { Briefcase, Mail, Lock, User, AtSign, ArrowRight, Loader2, CheckCircle2 } from 'lucide-react';
 import { useToast } from '@/hooks/use-toast';
 
 const benefits = [
@@ -16,6 +16,7 @@ const benefits = [
 
 const Register = () => {
   const [name, setName] = useState('');
+  const [username, setUsername] = useState('');
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [isLoading, setIsLoading] = useState(false);
@@ -25,6 +26,9 @@ const Register = () => {
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     setIsLoading(true);
+
+    // Store username in localStorage for greeting
+    localStorage.setItem('username', username || name.split(' ')[0]);
 
     // Simulate API call
     await new Promise((resolve) => setTimeout(resolve, 1000));
@@ -95,6 +99,22 @@ const Register = () => {
                       placeholder="John Doe"
                       value={name}
                       onChange={(e) => setName(e.target.value)}
+                      className="pl-10"
+                      required
+                    />
+                  </div>
+                </div>
+
+                <div className="space-y-2">
+                  <Label htmlFor="username">Username</Label>
+                  <div className="relative">
+                    <AtSign className="absolute left-3 top-1/2 -translate-y-1/2 text-muted-foreground" size={18} />
+                    <Input
+                      id="username"
+                      type="text"
+                      placeholder="johndoe"
+                      value={username}
+                      onChange={(e) => setUsername(e.target.value)}
                       className="pl-10"
                       required
                     />

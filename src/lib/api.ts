@@ -33,11 +33,12 @@ export const jobsApi = {
 
 export const authApi = {
   login: (email: string, password: string) => 
-    api.post<{ token: string; user: { id: string; email: string; name: string } }>('/auth/login', { email, password }),
-  register: (name: string, email: string, password: string) => 
-    api.post<{ token: string; user: { id: string; email: string; name: string } }>('/auth/register', { name, email, password }),
+    api.post<{ token: string; user: { id: string; email: string; name: string; username?: string } }>('/auth/login', { email, password }),
+  register: (name: string, email: string, password: string, username: string) => 
+    api.post<{ token: string; user: { id: string; email: string; name: string; username: string } }>('/auth/register', { name, email, password, username }),
   logout: () => {
     localStorage.removeItem('authToken');
     localStorage.removeItem('user');
   },
+  getHealth: () => api.get('/health'),
 };

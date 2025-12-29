@@ -18,8 +18,14 @@ const Login = () => {
     e.preventDefault();
     setIsLoading(true);
 
-    // Simulate API call
+    // Simulate API call - in real app, get username from API response
     await new Promise((resolve) => setTimeout(resolve, 1000));
+
+    // Store a default username if not already set (in real app, get from API)
+    if (!localStorage.getItem('username')) {
+      const emailUsername = email.split('@')[0];
+      localStorage.setItem('username', emailUsername);
+    }
 
     toast({
       title: 'Welcome back!',
