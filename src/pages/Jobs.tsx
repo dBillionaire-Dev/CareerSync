@@ -1,4 +1,4 @@
-import { useState, useMemo } from 'react';
+import { useState,useEffect, useMemo } from 'react';
 import { Link } from 'react-router-dom';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
@@ -115,6 +115,30 @@ const Jobs = () => {
     });
   }, [jobs, search, selectedStages, interestFilter, locationFilter, showArchived]);
 
+  // THIS RESETS THE PAGE WHEN FILTER RESULTS CHANGE
+  useEffect(() => {
+  setCurrentPage(1);
+  }, [filteredJobs]);
+
+
+  //Display only 10 jobs per page on table view
+  const JOBS_PER_PAGE = 10;
+  const [currentPage, setCurrentPage] = useState(1);
+  const totalJobs = filteredJobs.length;
+  const totalPages = Math.ceil(totalJobs / JOBS_PER_PAGE);
+
+  const startIndex = (currentPage - 1) * JOBS_PER_PAGE;
+  const endIndex = startIndex + JOBS_PER_PAGE;
+  const paginatedJobs = filteredJobs.slice(startIndex, endIndex);
+
+  //Display only 9 jobs per page on grid view
+  const ITEMS_PER_PAGE = 9;
+  const totalPagesGrid = Math.ceil(totalJobs / ITEMS_PER_PAGE);
+
+  const startIndexGrid = (currentPage - 1) * ITEMS_PER_PAGE;
+  const endIndexGrid = startIndex + ITEMS_PER_PAGE;
+  const paginatedJobsGrid = filteredJobs.slice(startIndexGrid, endIndexGrid);
+  
   const handleStageToggle = (stage: JobStage) => {
     setSelectedStages((prev) =>
       prev.includes(stage) ? prev.filter((s) => s !== stage) : [...prev, stage]
@@ -186,7 +210,7 @@ const Jobs = () => {
             {filteredJobs.length} of {totalCount} jobs
           </p>
         </div>
-        <div className="flex items-center gap-2">
+        <div className="flex flex-wrap items-center gap-2">
           <DataExport jobs={filteredJobs} />
           <OfferComparison jobs={jobs} />
           <Link to="/dashboard/jobs/new">
@@ -272,7 +296,7 @@ const Jobs = () => {
                 <SelectValue placeholder="Location" />
               </SelectTrigger>
               <SelectContent>
-                <SelectItem value="all">All Locations</SelectItem>
+                <SelectItem value="all">Locations</SelectItem>
                 {locationTypes.map((loc) => (
                   <SelectItem key={loc.value} value={loc.value}>
                     {loc.label}
@@ -340,7 +364,7 @@ const Jobs = () => {
                   </TableRow>
                 </TableHeader>
                 <TableBody>
-                  {filteredJobs.map((job) => (
+                  {paginatedJobs.map((job) => (
                     <JobTableRow
                       key={job.id}
                       job={job}
@@ -353,10 +377,32 @@ const Jobs = () => {
                   ))}
                 </TableBody>
               </Table>
+              <div className="flex items-center justify-between px-4 py-3 border-t border-border/50">
+                <Button 
+                variant="outline" 
+                size="sm" 
+                disabled={currentPage === 1}
+                onClick={() => setCurrentPage((p) => Math.max(p - 1, 1))}
+                >
+                  Prev
+                </Button>
+                <span className="text-sm text-muted-foreground">
+                Page {currentPage} of {totalPages}
+                </span>
+                <Button 
+                variant="outline" 
+                size="sm" 
+                disabled={currentPage === totalPages}
+                onClick={() => setCurrentPage((p) => Math.min(p + 1, totalPages))}
+                >
+                  Next
+                </Button>
+              </div>
             </Card>
           ) : viewMode === 'grid' ? (
+            <>
             <div className="grid gap-4 md:grid-cols-2 xl:grid-cols-3">
-              {filteredJobs.map((job) => (
+              {paginatedJobsGrid.map((job) => (
                 <JobCard 
                   key={job.id} 
                   job={job} 
@@ -367,6 +413,31 @@ const Jobs = () => {
                 />
               ))}
             </div>
+            <div className="flex items-center justify-between px-4 py-3 border-t border-border/50">
+                <Button 
+                variant="outline" 
+                size="sm" 
+                disabled={currentPage === 1}
+                onClick={() => setCurrentPage((p) => Math.max(p - 1, 1))}
+                >
+                  Prev
+                </Button>
+                <span className="text-sm text-muted-foreground">
+                  Showing 1–{filteredJobs.length} of {filteredJobs.length}
+                </span>
+                <span className="text-sm text-muted-foreground">
+                Page {currentPage} of {totalPagesGrid}
+                </span>
+                <Button 
+                variant="outline" 
+                size="sm" 
+                disabled={currentPage === totalPagesGrid}
+                onClick={() => setCurrentPage((p) => Math.min(p + 1, totalPagesGrid))}
+                >
+                  Next
+                </Button>
+            </div>
+            </>
           ) : viewMode === 'kanban' ? (
             <KanbanBoard
               jobs={filteredJobs}
@@ -391,7 +462,7 @@ const Jobs = () => {
                   </TableRow>
                 </TableHeader>
                 <TableBody>
-                  {filteredJobs.map((job) => (
+                  {paginatedJobs.map((job) => (
                     <JobTableRow
                       key={job.id}
                       job={job}
@@ -404,13 +475,26 @@ const Jobs = () => {
                 </TableBody>
               </Table>
               <div className="flex items-center justify-between px-4 py-3 border-t border-border/50">
-                <Button variant="outline" size="sm" disabled>
+                <Button 
+                variant="outline" 
+                size="sm" 
+                disabled={currentPage === 1}
+                onClick={() => setCurrentPage((p) => Math.max(p - 1, 1))}
+                >
                   Prev
                 </Button>
                 <span className="text-sm text-muted-foreground">
                   Showing 1–{filteredJobs.length} of {filteredJobs.length}
                 </span>
-                <Button variant="outline" size="sm" disabled>
+                <span className="text-sm text-muted-foreground">
+                Page {currentPage} of {totalPages}
+                </span>
+                <Button 
+                variant="outline" 
+                size="sm" 
+                disabled={currentPage === totalPages}
+                onClick={() => setCurrentPage((p) => Math.min(p + 1, totalPages))}
+                >
                   Next
                 </Button>
               </div>

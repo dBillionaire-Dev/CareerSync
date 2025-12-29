@@ -55,12 +55,12 @@ export const ApiHealthCheck = () => {
     },
     healthy: {
       icon: <CheckCircle2 size={14} />,
-      text: 'API Online',
+      text: 'Server Online',
       className: 'text-green-500',
     },
     error: {
       icon: <AlertCircle size={14} />,
-      text: 'API Offline',
+      text: 'Server Offline',
       className: 'text-destructive',
     },
   };
