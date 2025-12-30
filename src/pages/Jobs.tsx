@@ -38,6 +38,10 @@ import { JobStage, LocationType, stageLabels, Job } from '@/types/job';
 import { useToast } from '@/hooks/use-toast';
 import { useIsMobile } from '@/hooks/use-mobile';
 
+const TABLE_PER_PAGE = 10;
+const GRID_PER_PAGE = 9;
+
+
 const allStages: JobStage[] = [
   'tagged',
   'applying',
@@ -115,10 +119,10 @@ const Jobs = () => {
     });
   }, [jobs, search, selectedStages, interestFilter, locationFilter, showArchived]);
 
-  // THIS RESETS THE PAGE WHEN FILTER RESULTS CHANGE
+  // THIS RESETS THE PAGE WHEN FILTER OR VIEW RESULTS CHANGE
   useEffect(() => {
   setCurrentPage(1);
-  }, [filteredJobs]);
+  }, [filteredJobs, viewMode]);
 
 
   //Display only 10 jobs per page on table view
@@ -136,8 +140,32 @@ const Jobs = () => {
   const totalPagesGrid = Math.ceil(totalJobs / ITEMS_PER_PAGE);
 
   const startIndexGrid = (currentPage - 1) * ITEMS_PER_PAGE;
-  const endIndexGrid = startIndex + ITEMS_PER_PAGE;
+  const endIndexGrid = startIndexGrid + ITEMS_PER_PAGE;
   const paginatedJobsGrid = filteredJobs.slice(startIndexGrid, endIndexGrid);
+
+  /* =======================
+     TABLE PAGINATION (10)
+  ======================= */
+  const tableStartIndex = (currentPage - 1) * TABLE_PER_PAGE;
+  const tableEndIndex = tableStartIndex + TABLE_PER_PAGE;
+
+  const paginatedTableJobs = filteredJobs.slice(
+    tableStartIndex,
+    tableEndIndex
+  );
+
+  const tableStartItem = totalJobs === 0 ? 0 : tableStartIndex + 1;
+  const tableEndItem = Math.min(tableEndIndex, totalJobs);
+
+  /* =======================
+     GRID PAGINATION (9)
+  ======================= */
+  const gridStartIndex = (currentPage - 1) * GRID_PER_PAGE;
+  const gridEndIndex = gridStartIndex + GRID_PER_PAGE;
+
+
+  const gridStartItem = totalJobs === 0 ? 0 : gridStartIndex + 1;
+  const gridEndItem = Math.min(gridEndIndex, totalJobs);
   
   const handleStageToggle = (stage: JobStage) => {
     setSelectedStages((prev) =>
@@ -154,8 +182,6 @@ const Jobs = () => {
 
   const hasActiveFilters =
     search || selectedStages.length > 0 || interestFilter !== 'all' || locationFilter !== 'all';
-
-  const totalCount = jobs.filter((j) => (showArchived ? j.isArchived : !j.isArchived)).length;
 
   const handleEdit = (job: Job) => {
     toast({ title: 'Edit', description: `Editing ${job.company} - ${job.role}` });
@@ -206,9 +232,13 @@ const Jobs = () => {
       <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4">
         <div>
           <h1 className="text-3xl font-bold tracking-tight">Job Applications</h1>
+        {viewMode !== 'kanban' && (
           <p className="text-muted-foreground mt-1">
-            {filteredJobs.length} of {totalCount} jobs
+            {isMobile || viewMode === 'table'
+              ? `Showing ${tableStartItem} to ${tableEndItem} of ${totalJobs} jobs`
+              : `Showing ${gridStartItem} to ${gridEndItem} of ${totalJobs} jobs`}
           </p>
+        )}
         </div>
         <div className="flex flex-wrap items-center gap-2">
           <DataExport jobs={filteredJobs} />
@@ -423,9 +453,6 @@ const Jobs = () => {
                   Prev
                 </Button>
                 <span className="text-sm text-muted-foreground">
-                  Showing 1–{filteredJobs.length} of {filteredJobs.length}
-                </span>
-                <span className="text-sm text-muted-foreground">
                 Page {currentPage} of {totalPagesGrid}
                 </span>
                 <Button 
@@ -462,7 +489,7 @@ const Jobs = () => {
                   </TableRow>
                 </TableHeader>
                 <TableBody>
-                  {paginatedJobs.map((job) => (
+                  {paginatedTableJobs.map((job) => (
                     <JobTableRow
                       key={job.id}
                       job={job}
@@ -483,9 +510,6 @@ const Jobs = () => {
                 >
                   Prev
                 </Button>
-                <span className="text-sm text-muted-foreground">
-                  Showing 1–{filteredJobs.length} of {filteredJobs.length}
-                </span>
                 <span className="text-sm text-muted-foreground">
                 Page {currentPage} of {totalPages}
                 </span>

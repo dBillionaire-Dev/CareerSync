@@ -4,7 +4,7 @@ import { InterestStars } from './InterestStars';
 import { LocationBadge } from './LocationBadge';
 import { Card } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
-import { ExternalLink, DollarSign, Calendar, Pencil, Eye, Trash2, Mail } from 'lucide-react';
+import { ExternalLink, Calendar, Pencil, Eye, Trash2, Mail } from 'lucide-react';
 import { cn } from '@/lib/utils';
 import { format } from 'date-fns';
 
@@ -76,7 +76,7 @@ export const JobCard = ({
             className="mb-3"
           />
 
-          <div className="flex items-center gap-2 flex-wrap mt-auto">
+          <div className="flex flex-col items-start gap-2 flex-wrap mt-auto">
             <StageBadge stage={job.stage} />
             <InterestStars score={job.interestScore} />
 
@@ -85,7 +85,6 @@ export const JobCard = ({
 
             {job.salary && (
               <span className="flex items-center gap-1 text-xs text-muted-foreground">
-                <DollarSign size={12} />
                 {job.salary}
               </span>
             )}
