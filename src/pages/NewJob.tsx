@@ -13,6 +13,7 @@ import {
   SelectValue,
 } from '@/components/ui/select';
 import { ArrowLeft, Save, Loader2, Plus, X, Building2, Target, Users, Link2 } from 'lucide-react';
+import { ContactFollowUpFlag } from '@/components/ContactFollowUpFlag';
 import { JobStage, LocationType, stageLabels, TimelineEntry, Currency, currencyLabels, StarStory, Contact } from '@/types/job';
 import { useToast } from '@/hooks/use-toast';
 import { TimelineEntryModal } from '@/components/TimelineEntryModal';
@@ -247,7 +248,10 @@ const NewJob = () => {
                               {contact.name.charAt(0)}
                             </div>
                             <div>
-                              <p className="text-sm font-medium">{contact.name}</p>
+                              <div className="flex items-center gap-2">
+                                <p className="text-sm font-medium">{contact.name}</p>
+                                <ContactFollowUpFlag lastContactedAt={contact.lastContactedAt} />
+                              </div>
                               {contact.linkedinUrl && (
                                 <a href={contact.linkedinUrl} target="_blank" rel="noopener noreferrer" className="text-xs text-primary hover:underline flex items-center gap-1">
                                   <Link2 size={10} /> LinkedIn

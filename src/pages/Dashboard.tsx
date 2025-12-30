@@ -1,4 +1,4 @@
-import { useMemo, useState, useEffect } from 'react';
+import { useMemo } from 'react';
 import { Link } from 'react-router-dom';
 import { Card, CardContent, CardHeader, CardTitle, CardDescription } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
@@ -6,6 +6,7 @@ import { Plus, ArrowRight } from 'lucide-react';
 import { mockJobs } from '@/data/mockJobs';
 import { StageBadge } from '@/components/StageBadge';
 import { ApiHealthCheck } from '@/components/ApiHealthCheck';
+import { UserProfileHeader } from '@/components/UserProfileHeader';
 import { JobStage, stageLabels } from '@/types/job';
 import { format } from 'date-fns';
 
@@ -15,15 +16,6 @@ const stageChartColors: Record<JobStage, string> = {
 };
 
 const Dashboard = () => {
-  const [username, setUsername] = useState('');
-
-  useEffect(() => {
-    const storedUsername = localStorage.getItem('username');
-    if (storedUsername) {
-      setUsername(storedUsername);
-    }
-  }, []);
-
   const stats = useMemo(() => {
     const activeJobs = mockJobs.filter((j) => !j.isArchived);
     const stages = activeJobs.reduce((acc, job) => { acc[job.stage] = (acc[job.stage] || 0) + 1; return acc; }, {} as Record<JobStage, number>);
@@ -35,13 +27,11 @@ const Dashboard = () => {
 
   return (
     <div className="p-6 lg:p-8 space-y-8">
-      <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4">
-        <div>
-          <h1 className="text-3xl font-bold tracking-tight">
-            {username ? `Hi, ${username}!` : 'Dashboard'}
-          </h1>
-          <p className="text-muted-foreground mt-1">A quick glance at your current workload</p>
-        </div>
+      {/* User Profile Header with Avatar and Banner */}
+      <UserProfileHeader showBanner={true} />
+
+      <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4 mt-6">
+        <p className="text-muted-foreground">A quick glance at your current workload</p>
         <div className="flex items-center gap-3">
           <ApiHealthCheck />
           <Link to="/dashboard/jobs/new">

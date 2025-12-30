@@ -14,7 +14,7 @@ import {
   Send,
   Code2,
 } from 'lucide-react';
-import { MobileNav } from '@/components/MobileNav';
+import { HomeMobileNav } from '@/components/HomeMobileNav';
 import { useNavigate } from 'react-router-dom';
 import { useState } from 'react';
 import { useToast } from '@/hooks/use-toast';
@@ -97,7 +97,7 @@ const Index = () => {
           </div>
           
           {/* Mobile Navigation */}
-          <MobileNav onLogout={handleLogout} />
+          <HomeMobileNav />
         </div>
       </nav>
 

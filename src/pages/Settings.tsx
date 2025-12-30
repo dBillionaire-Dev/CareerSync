@@ -1,3 +1,4 @@
+import { useState } from 'react';
 import { Card, CardContent, CardHeader, CardTitle, CardDescription } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
@@ -5,8 +6,11 @@ import { Label } from '@/components/ui/label';
 import { Switch } from '@/components/ui/switch';
 import { Separator } from '@/components/ui/separator';
 import { User, Bell, Mail, Shield, Trash2, Camera, ImageIcon } from 'lucide-react';
+import { DeleteAccountDialog } from '@/components/DeleteAccountDialog';
 
 const Settings = () => {
+  const [deleteDialogOpen, setDeleteDialogOpen] = useState(false);
+
   return (
     <div className="p-6 lg:p-8 space-y-8 max-w-3xl">
       <div><h1 className="text-3xl font-bold tracking-tight">Settings</h1><p className="text-muted-foreground mt-1">Manage your account and preferences</p></div>
@@ -84,8 +88,19 @@ const Settings = () => {
       {/* Danger Zone */}
       <Card className="border-destructive/50">
         <CardHeader><CardTitle className="flex items-center gap-2 text-destructive"><Trash2 size={20} />Danger Zone</CardTitle><CardDescription>Irreversible actions for your account</CardDescription></CardHeader>
-        <CardContent><p className="text-sm text-muted-foreground mb-4">Once you delete your account, there is no going back. Please be certain.</p><Button variant="destructive">Delete Account</Button></CardContent>
+        <CardContent>
+          <p className="text-sm text-muted-foreground mb-4">
+            Deleting your account will schedule it for permanent removal after 30 days. 
+            You can recover your account by logging back in within that period.
+          </p>
+          <Button variant="destructive" onClick={() => setDeleteDialogOpen(true)}>
+            <Trash2 size={16} className="mr-2" />
+            Delete Account
+          </Button>
+        </CardContent>
       </Card>
+
+      <DeleteAccountDialog open={deleteDialogOpen} onOpenChange={setDeleteDialogOpen} />
     </div>
   );
 };
