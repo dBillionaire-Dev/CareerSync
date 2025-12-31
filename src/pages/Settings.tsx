@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { Card, CardContent, CardHeader, CardTitle, CardDescription } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
@@ -7,9 +7,50 @@ import { Switch } from '@/components/ui/switch';
 import { Separator } from '@/components/ui/separator';
 import { User, Bell, Mail, Shield, Trash2, Camera, ImageIcon } from 'lucide-react';
 import { DeleteAccountDialog } from '@/components/DeleteAccountDialog';
+import { useToast } from '@/hooks/use-toast';
 
 const Settings = () => {
   const [deleteDialogOpen, setDeleteDialogOpen] = useState(false);
+  const [avatar, setAvatar] = useState<string | null>(null);
+  const [banner, setBanner] = useState<string | null>(null);
+  const { toast } = useToast();
+
+  useEffect(() => {
+    const storedAvatar = localStorage.getItem('userAvatar');
+    const storedBanner = localStorage.getItem('userBanner');
+    if (storedAvatar) setAvatar(storedAvatar);
+    if (storedBanner) setBanner(storedBanner);
+  }, []);
+
+  const handleAvatarChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const file = e.target.files?.[0];
+    if (file) {
+      const reader = new FileReader();
+      reader.onloadend = () => {
+        const result = reader.result as string;
+        setAvatar(result);
+        localStorage.setItem('userAvatar', result);
+        window.dispatchEvent(new Event('profileUpdated'));
+        toast({ title: 'Avatar updated', description: 'Your profile avatar has been changed.' });
+      };
+      reader.readAsDataURL(file);
+    }
+  };
+
+  const handleBannerChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const file = e.target.files?.[0];
+    if (file) {
+      const reader = new FileReader();
+      reader.onloadend = () => {
+        const result = reader.result as string;
+        setBanner(result);
+        localStorage.setItem('userBanner', result);
+        window.dispatchEvent(new Event('profileUpdated'));
+        toast({ title: 'Banner updated', description: 'Your cover banner has been changed.' });
+      };
+      reader.readAsDataURL(file);
+    }
+  };
 
   return (
     <div className="p-6 lg:p-8 space-y-8 max-w-3xl">
@@ -22,12 +63,18 @@ const Settings = () => {
           {/* Cover Banner Upload */}
           <div className="space-y-2">
             <Label>Cover Banner</Label>
-            <div className="relative w-full h-32 bg-gradient-to-r from-primary/20 to-primary/5 rounded-lg border-2 border-dashed border-border hover:border-primary/50 transition-colors cursor-pointer flex items-center justify-center">
-              <div className="text-center">
-                <ImageIcon size={24} className="mx-auto text-muted-foreground mb-2" />
-                <span className="text-sm text-muted-foreground">Click to upload cover banner</span>
-              </div>
-              <input type="file" accept="image/*" className="absolute inset-0 opacity-0 cursor-pointer" />
+            <div className="relative w-full h-32 rounded-lg border-2 border-dashed border-border hover:border-primary/50 transition-colors cursor-pointer overflow-hidden">
+              {banner ? (
+                <img src={banner} alt="Cover banner" className="w-full h-full object-cover" />
+              ) : (
+                <div className="w-full h-full bg-gradient-to-r from-primary/20 to-primary/5 flex items-center justify-center">
+                  <div className="text-center">
+                    <ImageIcon size={24} className="mx-auto text-muted-foreground mb-2" />
+                    <span className="text-sm text-muted-foreground">Click to upload cover banner</span>
+                  </div>
+                </div>
+              )}
+              <input type="file" accept="image/*" className="absolute inset-0 opacity-0 cursor-pointer" onChange={handleBannerChange} />
             </div>
           </div>
 
@@ -35,9 +82,15 @@ const Settings = () => {
           <div className="space-y-2">
             <Label>Profile Avatar</Label>
             <div className="flex items-center gap-4">
-              <div className="relative w-20 h-20 rounded-full bg-gradient-to-br from-primary/20 to-primary/5 border-2 border-dashed border-border hover:border-primary/50 transition-colors cursor-pointer flex items-center justify-center overflow-hidden">
-                <Camera size={24} className="text-muted-foreground" />
-                <input type="file" accept="image/*" className="absolute inset-0 opacity-0 cursor-pointer" />
+              <div className="relative w-20 h-20 rounded-full border-2 border-dashed border-border hover:border-primary/50 transition-colors cursor-pointer overflow-hidden">
+                {avatar ? (
+                  <img src={avatar} alt="Profile avatar" className="w-full h-full object-cover" />
+                ) : (
+                  <div className="w-full h-full bg-gradient-to-br from-primary/20 to-primary/5 flex items-center justify-center">
+                    <Camera size={24} className="text-muted-foreground" />
+                  </div>
+                )}
+                <input type="file" accept="image/*" className="absolute inset-0 opacity-0 cursor-pointer" onChange={handleAvatarChange} />
               </div>
               <div>
                 <p className="text-sm font-medium">Upload avatar</p>

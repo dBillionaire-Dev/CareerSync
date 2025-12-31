@@ -1,49 +1,55 @@
 import { useState, useEffect } from 'react';
-import { Camera, ImageIcon } from 'lucide-react';
 
 interface UserProfileHeaderProps {
   showBanner?: boolean;
+  isDemo?: boolean;
 }
 
-export const UserProfileHeader = ({ showBanner = true }: UserProfileHeaderProps) => {
+const DEFAULT_DEMO_AVATAR = 'https://images.unsplash.com/photo-1472099645785-5658abf4ff4e?w=150&h=150&fit=crop&crop=face';
+const DEFAULT_DEMO_BANNER = 'https://images.unsplash.com/photo-1557683316-973673baf926?w=1200&h=400&fit=crop';
+
+export const UserProfileHeader = ({ showBanner = true, isDemo = false }: UserProfileHeaderProps) => {
   const [username, setUsername] = useState('');
   const [avatar, setAvatar] = useState<string | null>(null);
   const [banner, setBanner] = useState<string | null>(null);
 
   useEffect(() => {
-    const storedUsername = localStorage.getItem('username');
-    const storedAvatar = localStorage.getItem('userAvatar');
-    const storedBanner = localStorage.getItem('userBanner');
-    if (storedUsername) setUsername(storedUsername);
-    if (storedAvatar) setAvatar(storedAvatar);
-    if (storedBanner) setBanner(storedBanner);
-  }, []);
-
-  const handleAvatarChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    const file = e.target.files?.[0];
-    if (file) {
-      const reader = new FileReader();
-      reader.onloadend = () => {
-        const result = reader.result as string;
-        setAvatar(result);
-        localStorage.setItem('userAvatar', result);
-      };
-      reader.readAsDataURL(file);
+    if (isDemo) {
+      setUsername('Demo User');
+      setAvatar(DEFAULT_DEMO_AVATAR);
+      setBanner(DEFAULT_DEMO_BANNER);
+    } else {
+      const storedUsername = localStorage.getItem('username');
+      const storedAvatar = localStorage.getItem('userAvatar');
+      const storedBanner = localStorage.getItem('userBanner');
+      if (storedUsername) setUsername(storedUsername);
+      if (storedAvatar) setAvatar(storedAvatar);
+      if (storedBanner) setBanner(storedBanner);
     }
-  };
+  }, [isDemo]);
 
-  const handleBannerChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    const file = e.target.files?.[0];
-    if (file) {
-      const reader = new FileReader();
-      reader.onloadend = () => {
-        const result = reader.result as string;
-        setBanner(result);
-        localStorage.setItem('userBanner', result);
-      };
-      reader.readAsDataURL(file);
-    }
-  };
+  // Listen for storage changes to update in real-time
+  useEffect(() => {
+    if (isDemo) return;
+    
+    const handleStorageChange = () => {
+      const storedAvatar = localStorage.getItem('userAvatar');
+      const storedBanner = localStorage.getItem('userBanner');
+      const storedUsername = localStorage.getItem('username');
+      if (storedAvatar) setAvatar(storedAvatar);
+      if (storedBanner) setBanner(storedBanner);
+      if (storedUsername) setUsername(storedUsername);
+    };
+
+    window.addEventListener('storage', handleStorageChange);
+    // Also listen for custom event for same-tab updates
+    window.addEventListener('profileUpdated', handleStorageChange);
+    
+    return () => {
+      window.removeEventListener('storage', handleStorageChange);
+      window.removeEventListener('profileUpdated', handleStorageChange);
+    };
+  }, [isDemo]);
 
   return (
     <div className="relative">
@@ -55,10 +61,6 @@ export const UserProfileHeader = ({ showBanner = true }: UserProfileHeaderProps)
           ) : (
             <div className="w-full h-full bg-gradient-to-r from-primary/30 via-primary/20 to-stage-interviewing/30" />
           )}
-          <label className="absolute bottom-2 right-2 p-2 rounded-lg bg-background/80 backdrop-blur-sm cursor-pointer hover:bg-background transition-colors border border-border/50">
-            <ImageIcon size={16} className="text-muted-foreground" />
-            <input type="file" accept="image/*" className="hidden" onChange={handleBannerChange} />
-          </label>
         </div>
       )}
 
@@ -74,10 +76,6 @@ export const UserProfileHeader = ({ showBanner = true }: UserProfileHeaderProps)
               </span>
             )}
           </div>
-          <label className="absolute -bottom-1 -right-1 p-1.5 rounded-full bg-primary cursor-pointer hover:bg-primary/90 transition-colors shadow-lg">
-            <Camera size={12} className="text-primary-foreground" />
-            <input type="file" accept="image/*" className="hidden" onChange={handleAvatarChange} />
-          </label>
         </div>
         <div className={showBanner ? 'mt-8' : ''}>
           <h1 className="text-2xl md:text-3xl font-bold tracking-tight">

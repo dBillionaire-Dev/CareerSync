@@ -7,12 +7,13 @@ import {
   Settings,
   LogOut,
   ChevronLeft,
+  ChevronRight,
   Menu,
 } from 'lucide-react';
 import { cn } from '@/lib/utils';
 import { Button } from '@/components/ui/button';
-import { useState } from 'react';
 import { ThemeToggle } from './ThemeToggle';
+import { useSidebarCollapsed } from '@/hooks/use-sidebar-collapsed';
 
 const navItems = [
   { to: '/dashboard', icon: LayoutDashboard, label: 'Overview', end: true },
@@ -26,15 +27,13 @@ const bottomItems = [
 ];
 
 export const DashboardSidebar = () => {
-  const [collapsed, setCollapsed] = useState(false);
+  const { collapsed, setCollapsed, toggle } = useSidebarCollapsed();
   const location = useLocation();
   const navigate = useNavigate();
 
   const handleLogout = () => {
-    // Clear any local state/storage
     localStorage.removeItem('jobtracker-user');
     localStorage.removeItem('jobtracker-token');
-    // Redirect to landing page
     navigate('/');
   };
 
@@ -45,7 +44,7 @@ export const DashboardSidebar = () => {
         variant="ghost"
         size="icon"
         className="fixed top-4 right-4 z-50 md:hidden"
-        onClick={() => setCollapsed(!collapsed)}
+        onClick={toggle}
       >
         <Menu size={20} />
       </Button>
@@ -69,7 +68,7 @@ export const DashboardSidebar = () => {
                 onClick={() => setCollapsed(false)}
                 className="w-9 h-9 rounded-xl gradient-hero flex items-center justify-center shadow-glow hover:scale-105 transition-transform"
               >
-                <Briefcase size={18} className="text-primary-foreground" />
+                <ChevronRight size={18} className="text-primary-foreground" />
               </button>
             ) : (
               <RouterNavLink
