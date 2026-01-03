@@ -13,14 +13,27 @@ const Settings = () => {
   const [deleteDialogOpen, setDeleteDialogOpen] = useState(false);
   const [avatar, setAvatar] = useState<string | null>(null);
   const [banner, setBanner] = useState<string | null>(null);
+  const [username, setUsername] = useState('');
   const { toast } = useToast();
 
   useEffect(() => {
     const storedAvatar = localStorage.getItem('userAvatar');
     const storedBanner = localStorage.getItem('userBanner');
+    const storedUsername = localStorage.getItem('username');
     if (storedAvatar) setAvatar(storedAvatar);
     if (storedBanner) setBanner(storedBanner);
+    if (storedUsername) setUsername(storedUsername);
   }, []);
+
+  const handleUsernameChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    setUsername(e.target.value);
+  };
+
+  const handleSaveProfile = () => {
+    localStorage.setItem('username', username);
+    window.dispatchEvent(new Event('profileUpdated'));
+    toast({ title: 'Profile saved', description: 'Your profile information has been updated.' });
+  };
 
   const handleAvatarChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const file = e.target.files?.[0];
@@ -100,10 +113,10 @@ const Settings = () => {
           </div>
 
           <div className="grid gap-4 sm:grid-cols-2">
-            <div className="space-y-2"><Label htmlFor="name">Full Name</Label><Input id="name" defaultValue="John Doe" /></div>
+            <div className="space-y-2"><Label htmlFor="username">Username</Label><Input id="username" value={username} onChange={handleUsernameChange} placeholder="Enter your username" /></div>
             <div className="space-y-2"><Label htmlFor="email">Email</Label><Input id="email" type="email" defaultValue="john@example.com" /></div>
           </div>
-          <Button className="gradient-hero text-primary-foreground">Save Changes</Button>
+          <Button className="gradient-hero text-primary-foreground" onClick={handleSaveProfile}>Save Changes</Button>
         </CardContent>
       </Card>
 
